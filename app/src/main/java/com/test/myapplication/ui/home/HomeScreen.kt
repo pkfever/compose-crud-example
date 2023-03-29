@@ -42,7 +42,6 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
     if (showDialog.value) {
         UserEditDialog(profileViewModel, dismissListener = {
             showDialog.value = !showDialog.value
-            homeViewModel.getUser()
         })
     }
 
@@ -61,7 +60,7 @@ private fun BodyContent(
     onEditClick: (User) -> Unit
 ) {
 
-    val uiState: HomeUiState by homeViewModel.uiState.collectAsState()
+    val users by homeViewModel.users.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -69,35 +68,25 @@ private fun BodyContent(
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        when (uiState) {
-            is HomeUiState.UserList -> {
-
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(
-                        top = 10.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-                ) {
-                    items((uiState as HomeUiState.UserList).items) {
-                        UserListItem(
-                            user = it,
-                            context = context,
-                            { onEditClick(it) }
-                        ) { user -> homeViewModel.deleteUser(user) }
-                        Divider(
-                            color = Color.Black,
-                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
-                        )
-                    }
-                }
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(
+                top = 10.dp,
+                start = 16.dp,
+                end = 16.dp
+            )
+        ) {
+            items((users)) {
+                UserListItem(
+                    user = it,
+                    context = context,
+                    { onEditClick(it) }
+                ) { user -> homeViewModel.deleteUser(user) }
+                Divider(
+                    color = Color.Black,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                )
             }
-
-            HomeUiState.loading -> {
-
-            }
-            is HomeUiState.Error -> Text(text = (uiState as HomeUiState.Error).msg)
         }
     }
 }

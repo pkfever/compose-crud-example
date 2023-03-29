@@ -13,25 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 
-    private val userHomeState = MutableStateFlow<HomeUiState>(HomeUiState.loading)
-
-    val uiState = userHomeState.asStateFlow()
-
-    init {
-        getUser()
-    }
-
-    fun getUser() {
-        viewModelScope.launch {
-            val data = userRepository.getUserList()
-            userHomeState.value = HomeUiState.UserList(data)
-        }
-    }
+    val users = userRepository.getUserList()
 
     fun deleteUser(user: User) {
         viewModelScope.launch {
             userRepository.deleteUser(user)
-            getUser()
         }
     }
 }
