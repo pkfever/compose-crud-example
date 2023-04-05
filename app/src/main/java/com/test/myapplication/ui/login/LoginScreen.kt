@@ -9,11 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -29,9 +25,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.test.myapplication.ui.login.LoginUiState.Empty
-import com.test.myapplication.ui.login.LoginUiState.Error
-import com.test.myapplication.ui.login.LoginUiState.Success
+import com.test.myapplication.ui.login.LoginUiEvents.Error
+import com.test.myapplication.ui.login.LoginUiEvents.Success
 import com.test.myapplication.ui.view.AppBtn
 import com.test.myapplication.ui.view.AppTextField
 
@@ -42,8 +37,8 @@ fun LoginScreen(
     onUserLogin: () -> Unit
 ) {
 
-    val loginUiState by loginViewModel.uiState.collectAsState(initial = Empty)
-    BodyContent(loginViewModel, loginUiState, onSignupClick, onUserLogin)
+    val uiLoginState by loginViewModel.uiState.collectAsState()
+    BodyContent(loginViewModel,uiLoginState, onSignupClick, onUserLogin)
 }
 
 @Composable
@@ -54,7 +49,7 @@ fun BodyContent(
     onUserLogin: () -> Unit
 ) {
 
-    HandleLoginUiState(loginUiState = loginUiState) {
+    HandleLoginUiState(loginViewModel = loginViewModel) {
         onUserLogin()
     }
     Box(
@@ -140,18 +135,19 @@ fun BodyContent(
 }
 
 @Composable
-private fun HandleLoginUiState(loginUiState: LoginUiState, onUserLogin: () -> Unit) {
+private fun HandleLoginUiState(loginViewModel: LoginViewModel, onUserLogin: () -> Unit) {
     val context = LocalContext.current
-    LaunchedEffect(key1 = loginUiState) {
-        when (loginUiState) {
-            Success -> {
-                Toast.makeText(context, "User found!", Toast.LENGTH_SHORT).show()
-                onUserLogin()
+    LaunchedEffect(key1 = true) {
+        loginViewModel.uiEvents.collect {
+            when (it) {
+                Success -> {
+                    onUserLogin()
+                }
+                Error -> {
+                    Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show()
+                }
+                else -> {}
             }
-            Error -> {
-                Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show()
-            }
-            else -> {}
         }
     }
 }
