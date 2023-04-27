@@ -25,6 +25,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.test.myapplication.ui.login.LoginUiEvents.Error
 import com.test.myapplication.ui.login.LoginUiEvents.Success
 import com.test.myapplication.ui.view.AppBtn
@@ -32,13 +34,16 @@ import com.test.myapplication.ui.view.AppTextField
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel,
-    onSignupClick: () -> Unit,
-    onUserLogin: () -> Unit
+    navController: NavController,
+    loginViewModel: LoginViewModel
 ) {
 
     val uiLoginState by loginViewModel.uiState.collectAsState()
-    BodyContent(loginViewModel,uiLoginState, onSignupClick, onUserLogin)
+    BodyContent(
+        loginViewModel,
+        uiLoginState,
+        { navController.navigate("signup") },
+        { navController.navigate("home") })
 }
 
 @Composable
@@ -146,7 +151,6 @@ private fun HandleLoginUiState(loginViewModel: LoginViewModel, onUserLogin: () -
                 Error -> {
                     Toast.makeText(context, "Invalid user", Toast.LENGTH_SHORT).show()
                 }
-                else -> {}
             }
         }
     }
@@ -156,8 +160,7 @@ private fun HandleLoginUiState(loginViewModel: LoginViewModel, onUserLogin: () -
 @Composable
 fun PreviewLoginScreen() {
     LoginScreen(
-        loginViewModel = hiltViewModel(),
-        onSignupClick = {},
-        onUserLogin = {}
+        navController = rememberNavController(),
+        loginViewModel = hiltViewModel()
     )
 }
