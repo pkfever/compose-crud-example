@@ -37,7 +37,6 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
     val showDialog = remember {
         mutableStateOf(false)
     }
-    val context = LocalContext.current
 
     if (showDialog.value) {
         UserEditDialog(profileViewModel, dismissListener = {
@@ -45,7 +44,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
         })
     }
 
-    BodyContent(homeViewModel, context) {
+    BodyContent(homeViewModel) {
         profileViewModel.setUserId(it.id)
         showDialog.value = true
     }
@@ -56,7 +55,6 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
 @Composable
 private fun BodyContent(
     homeViewModel: HomeViewModel,
-    context: Context,
     onEditClick: (User) -> Unit
 ) {
 
@@ -79,7 +77,6 @@ private fun BodyContent(
             items((users)) {
                 UserListItem(
                     user = it,
-                    context = context,
                     { onEditClick(it) }
                 ) { user -> homeViewModel.deleteUser(user) }
                 Divider(
@@ -94,7 +91,6 @@ private fun BodyContent(
 @Composable
 private fun UserListItem(
     user: User,
-    context: Context,
     onEditClick: () -> Unit,
     onDeleteBtnClick: (User) -> Unit
 ) {

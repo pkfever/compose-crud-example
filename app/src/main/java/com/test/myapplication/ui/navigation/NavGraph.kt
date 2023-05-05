@@ -28,11 +28,13 @@ fun NavGraph(
                 loginViewModel
             )
         }
+
         composable("signup") {
 
             val signupViewModel = hiltViewModel<SignupViewModel>()
             SignupScreen(navController, viewModel = signupViewModel)
         }
+
         composable("home") {
 
             val profileViewModel = hiltViewModel<ProfileViewModel>()
