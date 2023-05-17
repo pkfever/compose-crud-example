@@ -11,15 +11,20 @@ import com.test.myapplication.ui.login.state.EmailState
 import com.test.myapplication.ui.login.state.PasswordState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
 
-    private var loginUiStateFlow = MutableSharedFlow<LoginUiState>()
-    val uiState: SharedFlow<LoginUiState> = loginUiStateFlow
+    private var loginUiEventFlow = MutableSharedFlow<LoginUiEvents>()
+    val uiEvents: SharedFlow<LoginUiEvents> = loginUiEventFlow
+
+    private var loginUiStateFlow = MutableStateFlow<LoginUiState>(LoginUiState.NO_STATE)
+    val uiState: StateFlow<LoginUiState> = loginUiStateFlow
 
     var emailState by mutableStateOf(EmailState())
     var passwordState by mutableStateOf(PasswordState())
@@ -41,17 +46,20 @@ class LoginViewModel @Inject constructor(private val userRepository: UserReposit
 
             val response = userRepository.checkUserStatus(loginModel)
             if (response) {
-                loginUiStateFlow.emit(LoginUiState.Success)
+                loginUiEventFlow.emit(LoginUiEvents.Success)
             } else {
-                loginUiStateFlow.emit(LoginUiState.Error)
+                loginUiEventFlow.emit(LoginUiEvents.Error)
             }
         }
     }
 }
 
+sealed class LoginUiEvents {
+    object Success : LoginUiEvents()
+    object Error : LoginUiEvents()
+}
+
 sealed class LoginUiState {
     object Loading : LoginUiState()
-    object Empty : LoginUiState()
-    object Success : LoginUiState()
-    object Error : LoginUiState()
+    object NO_STATE : LoginUiState()
 }

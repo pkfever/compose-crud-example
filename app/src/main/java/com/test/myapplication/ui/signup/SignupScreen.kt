@@ -22,12 +22,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.test.myapplication.ui.view.AppBtn
 import com.test.myapplication.ui.view.AppTextField
 
 @Composable
-fun SignupScreen(viewModel: SignupViewModel = hiltViewModel(), onSignup: () -> Unit) {
-    BodyContent(viewModel = viewModel, onSignup)
+fun SignupScreen(
+    navController: NavController,
+    viewModel: SignupViewModel = hiltViewModel()
+) {
+    BodyContent(viewModel = viewModel) { navController.popBackStack() }
 }
 
 @Composable

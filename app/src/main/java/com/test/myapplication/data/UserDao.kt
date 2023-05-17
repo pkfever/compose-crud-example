@@ -1,7 +1,13 @@
 package com.test.myapplication.data
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Update
+import androidx.room.Query
+import androidx.room.Delete
 import com.test.myapplication.data.entities.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -24,6 +30,6 @@ interface UserDao {
     @Query("DELETE FROM user_table")
     suspend fun deleteAllUsers()
 
-    @Query("SELECT * from user_table ORDER BY id ASC") // <- Add a query to fetch all users (in user_table) in ascending order by their IDs.
-    suspend fun readAllData(): List<User> // <- This means function return type is List. Specifically, a List of Users.
+    @Query("SELECT * from user_table ORDER BY id ASC")
+    fun readAllData(): Flow<List<User>>
 }

@@ -1,6 +1,5 @@
 package com.test.myapplication.ui.home
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,9 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.test.myapplication.R
 import com.test.myapplication.data.entities.User
 import com.test.myapplication.ui.edit.ProfileViewModel
 import com.test.myapplication.ui.edit.UserEditDialog
@@ -37,16 +36,14 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
     val showDialog = remember {
         mutableStateOf(false)
     }
-    val context = LocalContext.current
 
     if (showDialog.value) {
         UserEditDialog(profileViewModel, dismissListener = {
             showDialog.value = !showDialog.value
-            homeViewModel.getUser()
         })
     }
 
-    BodyContent(homeViewModel, context) {
+    BodyContent(homeViewModel) {
         profileViewModel.setUserId(it.id)
         showDialog.value = true
     }
@@ -57,11 +54,10 @@ fun HomeScreen(homeViewModel: HomeViewModel, profileViewModel: ProfileViewModel)
 @Composable
 private fun BodyContent(
     homeViewModel: HomeViewModel,
-    context: Context,
     onEditClick: (User) -> Unit
 ) {
 
-    val uiState: HomeUiState by homeViewModel.uiState.collectAsState()
+    val users by homeViewModel.users.collectAsState(initial = emptyList())
 
     Box(
         modifier = Modifier
@@ -69,35 +65,24 @@ private fun BodyContent(
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        when (uiState) {
-            is HomeUiState.UserList -> {
-
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(
-                        top = 10.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-                ) {
-                    items((uiState as HomeUiState.UserList).items) {
-                        UserListItem(
-                            user = it,
-                            context = context,
-                            { onEditClick(it) }
-                        ) { user -> homeViewModel.deleteUser(user) }
-                        Divider(
-                            color = Color.Black,
-                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
-                        )
-                    }
-                }
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(
+                top = 10.dp,
+                start = 16.dp,
+                end = 16.dp
+            )
+        ) {
+            items((users)) {
+                UserListItem(
+                    user = it,
+                    { onEditClick(it) }
+                ) { user -> homeViewModel.deleteUser(user) }
+                Divider(
+                    color = Color.Black,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                )
             }
-
-            HomeUiState.loading -> {
-
-            }
-            is HomeUiState.Error -> Text(text = (uiState as HomeUiState.Error).msg)
         }
     }
 }
@@ -105,7 +90,6 @@ private fun BodyContent(
 @Composable
 private fun UserListItem(
     user: User,
-    context: Context,
     onEditClick: () -> Unit,
     onDeleteBtnClick: (User) -> Unit
 ) {
@@ -121,7 +105,7 @@ private fun UserListItem(
                 horizontalArrangement = Arrangement.End
             ) {
                 Image(
-                    painter = painterResource(com.test.myapplication.R.drawable.ic_edit),
+                    painter = painterResource(R.drawable.ic_edit),
                     contentDescription = null, // decorative
                     modifier = Modifier
                         .padding(8.dp)
@@ -134,7 +118,7 @@ private fun UserListItem(
                 )
 
                 Image(
-                    painter = painterResource(com.test.myapplication.R.drawable.ic_delete),
+                    painter = painterResource(R.drawable.ic_delete),
                     contentDescription = null, // decorative
                     modifier = Modifier
                         .padding(8.dp)

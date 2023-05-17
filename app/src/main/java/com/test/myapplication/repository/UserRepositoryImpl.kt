@@ -5,6 +5,7 @@ import com.test.myapplication.data.UserDao
 import com.test.myapplication.data.entities.User
 import com.test.myapplication.ui.login.model.LoginModel
 import com.test.myapplication.ui.signup.model.SignupModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : UserRepository {
@@ -39,7 +40,7 @@ class UserRepositoryImpl @Inject constructor(private val userDao: UserDao) : Use
         userDao.deleteUser(user)
     }
 
-    override suspend fun getUserList(): List<User> {
+    override fun getUserList(): Flow<List<User>> {
         return userDao.readAllData()
     }
 
