@@ -1,6 +1,5 @@
 package com.test.myapplication.ui.home
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,9 +23,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.test.myapplication.R
 import com.test.myapplication.data.entities.User
 import com.test.myapplication.ui.edit.ProfileViewModel
 import com.test.myapplication.ui.edit.UserEditDialog
@@ -106,7 +105,7 @@ private fun UserListItem(
                 horizontalArrangement = Arrangement.End
             ) {
                 Image(
-                    painter = painterResource(com.test.myapplication.R.drawable.ic_edit),
+                    painter = painterResource(R.drawable.ic_edit),
                     contentDescription = null, // decorative
                     modifier = Modifier
                         .padding(8.dp)
@@ -119,7 +118,7 @@ private fun UserListItem(
                 )
 
                 Image(
-                    painter = painterResource(com.test.myapplication.R.drawable.ic_delete),
+                    painter = painterResource(R.drawable.ic_delete),
                     contentDescription = null, // decorative
                     modifier = Modifier
                         .padding(8.dp)
