@@ -43,7 +43,7 @@ fun LoginScreen(
         loginViewModel,
         uiLoginState,
         { navController.navigate("signup") },
-        { navController.navigate("home") })
+        { navController.navigate("chat") })
 }
 
 @Composable

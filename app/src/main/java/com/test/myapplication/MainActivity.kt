@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navController = rememberNavController()
-                    NavGraph(navController, startDestination = "login")
+                    NavGraph(navController, startDestination = "chat")
                 }
             }
         }

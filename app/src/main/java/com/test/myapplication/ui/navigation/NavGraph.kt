@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.test.myapplication.ui.chat.ChatScreen
+import com.test.myapplication.ui.chat.ChatViewModel
 import com.test.myapplication.ui.edit.ProfileViewModel
 import com.test.myapplication.ui.home.HomeScreen
 import com.test.myapplication.ui.home.HomeViewModel
@@ -42,6 +44,11 @@ fun NavGraph(
 
             HomeScreen(homeViewModel = homeViewModel, profileViewModel = profileViewModel)
 
+        }
+        
+        composable("chat") {
+            val chatViewModel = hiltViewModel<ChatViewModel>()
+            ChatScreen(chatViewModel = chatViewModel)
         }
     }
 }
