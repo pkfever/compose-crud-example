@@ -12,10 +12,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Divider
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -66,9 +67,9 @@ fun BodyContent(chatViewModel: ChatViewModel, chatList: State<List<ChatGpt>>) {
             ) {
                 items(chatList.value) {
                     ChatListItem(it)
-                    Divider(
-                        color = Color.Black,
-                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                    HorizontalDivider(
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                        thickness = DividerDefaults.Thickness, color = Color.Black
                     )
                 }
             }
@@ -77,7 +78,7 @@ fun BodyContent(chatViewModel: ChatViewModel, chatList: State<List<ChatGpt>>) {
 
                 Column {
 
-                    Divider()
+                    HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
                     Row(verticalAlignment = Alignment.CenterVertically) {
 
                         val keyboardController = LocalSoftwareKeyboardController.current
@@ -95,10 +96,21 @@ fun BodyContent(chatViewModel: ChatViewModel, chatList: State<List<ChatGpt>>) {
                                 .padding(2.dp),
                             value = chatMessageTypeState.text,
                             onValueChange = { chatMessageTypeState.text = it },
-                            colors = TextFieldDefaults.textFieldColors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
-                                backgroundColor = Color.Transparent
+                            colors = TextFieldDefaults.colors(
+//                                focusedIndicatorColor = Color.Transparent,
+//                                unfocusedIndicatorColor = Color.Transparent,
+//                                backgroundColor = Color.Transparent,
+
+//                                focusedIndicatorColor = Color.Transparent,
+//                                unfocusedIndicatorColor = Color.Transparent,
+//                                disabledIndicatorColor = Color.Transparent, // Consider disabled state as well
+//                                // For the background color of the text field itself (the input area)
+//                                // In M3, this is controlled by 'unfocusedContainerColor' and 'focusedContainerColor' etc.
+//                                // If you want the entire TextField to have a transparent background including the container:
+//                                unfocusedContainerColor = Color.Transparent,
+//                                focusedContainerColor = Color.Transparent,
+//                                disabledContainerColor = Color.Transparent,
+//                                cursorColor = MaterialTheme.colorScheme.primary
                             ),
                             placeholder = { Text(text = "Add a message") },
                         )

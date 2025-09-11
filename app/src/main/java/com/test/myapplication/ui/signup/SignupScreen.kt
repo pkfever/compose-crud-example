@@ -50,7 +50,7 @@ fun BodyContent(viewModel: SignupViewModel, onSignup: () -> Unit) {
         modifier = Modifier
             .padding(16.dp)
             .fillMaxSize()
-            .background(Color.White)
+//            .background(Color.White)
     ) {
 
         Column {

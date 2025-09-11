@@ -61,7 +61,7 @@ fun BodyContent(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxSize()
-            .background(Color.White)
+//            .background(Color.White)
     ) {
 
         Column {
